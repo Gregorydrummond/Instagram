@@ -1,15 +1,21 @@
 package com.example.instagram;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,7 @@ public class FeedActivity extends AppCompatActivity {
     List<Post> posts;
     RecyclerView rvPosts;
     PostsAdapter adapter;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +36,11 @@ public class FeedActivity extends AppCompatActivity {
 
         //Find components
         rvPosts = findViewById(R.id.rvPosts);
+        toolbar = findViewById(R.id.tbFeedToolbar);
+        toolbar.setTitle("");
+
+        // Sets the Toolbar to act as the ActionBar for this Activity window
+        setSupportActionBar(toolbar);
 
         //Initialize posts array
         posts = new ArrayList<>();
@@ -45,6 +57,34 @@ public class FeedActivity extends AppCompatActivity {
         //Query posts
         queryPosts();
 
+    }
+
+    //Menu icons are inflated
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_feed, menu);
+        return true;
+    }
+
+    //Handle menu item clicks
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.itemCreate:
+                Intent intentCreate = new Intent(FeedActivity.this, MainActivity.class);
+                startActivity(intentCreate);
+                return true;
+            case R.id.itemLogout:
+                ParseUser.logOut();
+                Log.i(TAG, "onClick: User logged out");
+                Intent intentLogout = new Intent(FeedActivity.this, LoginActivity.class);
+                startActivity(intentLogout);
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void queryPosts() {
