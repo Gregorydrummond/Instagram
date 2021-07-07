@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1;
 
-    Button btnLogOut;
     ImageView ivPostImage;
     EditText etDescription;
     Button btnGetImage;
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Find Components
-        btnLogOut = findViewById(R.id.btnLogOut);
         ivPostImage = findViewById(R.id.ivPostImage);
         etDescription = findViewById(R.id.etDescription);
         btnGetImage = findViewById(R.id.btnGetImage);
@@ -78,28 +76,12 @@ public class MainActivity extends AppCompatActivity {
                 //Get current user
                 ParseUser parseUser = ParseUser.getCurrentUser();
                 //Save post
-                savePoast(description, parseUser, photoFile);
+                savePost(description, parseUser, photoFile);
                 //Exit activity
                 finish();
                 
             }
         });
-
-        //Set logout click
-        btnLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser.logOut();
-                Log.i(TAG, "onClick: User logged out");
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-        //Query Posts
-        //queryPosts();
-        
     }
 
     //Launch camera
@@ -159,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //Save post to backend
-    private void savePoast(String description, ParseUser parseUser, File photoFile) {
+    private void savePost(String description, ParseUser parseUser, File photoFile) {
         //Create new post object
         Post post = new Post();
         

@@ -8,15 +8,6 @@
     tools:context=".MainActivity">
 
 
-    <Button
-        android:id="@+id/btnLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"
-        android:text="Log Out" />
-
     <ImageView
         android:id="@+id/ivPostImage"
         android:layout_width="match_parent"
