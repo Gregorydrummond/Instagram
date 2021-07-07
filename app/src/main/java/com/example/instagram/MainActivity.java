@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                 ParseUser parseUser = ParseUser.getCurrentUser();
                 //Save post
                 savePoast(description, parseUser, photoFile);
+                //Exit activity
+                finish();
                 
             }
         });
