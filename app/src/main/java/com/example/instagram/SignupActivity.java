@@ -68,6 +68,7 @@ public class SignupActivity extends AppCompatActivity {
                 } else {
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
+                    Log.e(TAG, "done: Error signing up", e);
                 }
             }
         });

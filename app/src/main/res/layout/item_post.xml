@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvItemUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="Username" />
+
+    <ImageView
+        android:id="@+id/ivItemPostImage"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_below="@+id/tvItemUserName"
+        android:layout_alignStart="@+id/tvItemUserName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvItemDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivItemPostImage"
+        android:layout_alignStart="@+id/ivItemPostImage"
+        android:layout_alignEnd="@+id/ivItemPostImage"
+        android:layout_marginTop="5dp"
+        android:textColor="#000000"
+        tools:text="Caption" />
+</RelativeLayout>

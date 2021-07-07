@@ -183,28 +183,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void queryPosts() {
-        // Specify which class to query
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-
-        //Include user info
-        query.include(Post.KEY_USER);
-
-        //Get post objects
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                //Error in query
-                if(e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-                //Successful query
-                for (Post post : posts) {
-                    Log.i(TAG, "Post Description: " + post.getDescription() + ", user: " + post.getUser().getUsername());
-                }
-            }
-        });
-    }
 }
