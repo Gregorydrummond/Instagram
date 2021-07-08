@@ -12,7 +12,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="15dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="Username" />
 
@@ -21,10 +21,9 @@
         android:layout_width="wrap_content"
         android:layout_height="250dp"
         android:layout_below="@+id/tvItemUserName"
-        android:layout_alignStart="@+id/tvItemUserName"
+        android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -32,10 +31,32 @@
         android:id="@+id/tvItemDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivItemPostImage"
-        android:layout_alignStart="@+id/ivItemPostImage"
+        android:layout_alignTop="@+id/tvName"
         android:layout_alignEnd="@+id/ivItemPostImage"
-        android:layout_marginTop="5dp"
+        android:layout_marginStart="3dp"
+        android:layout_toEndOf="@+id/tvName"
         android:textColor="#000000"
         tools:text="Caption" />
+
+    <TextView
+        android:id="@+id/tvTimeAgo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvItemDescription"
+        android:layout_alignStart="@+id/tvName"
+        android:layout_marginTop="3dp"
+        android:textSize="12sp"
+        tools:text="1 hour ago" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivItemPostImage"
+        android:layout_alignStart="@+id/tvItemUserName"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        tools:text="Greg" />
+
 </RelativeLayout>
