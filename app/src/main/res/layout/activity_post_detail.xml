@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PostDetailActivity">
+
+    <TextView
+        android:id="@+id/tvItemUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="Username" />
+
+    <ImageView
+        android:id="@+id/ivItemPostImage"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:layout_below="@+id/tvItemUserName"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvItemDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvName"
+        android:layout_alignEnd="@+id/ivItemPostImage"
+        android:layout_marginStart="3dp"
+        android:layout_toEndOf="@+id/tvName"
+        android:textColor="#000000"
+        tools:text="Caption" />
+
+    <TextView
+        android:id="@+id/tvTimeAgo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvItemDescription"
+        android:layout_alignStart="@+id/tvName"
+        android:layout_marginTop="3dp"
+        android:textSize="12sp"
+        tools:text="1 hour ago" />
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivItemPostImage"
+        android:layout_alignStart="@+id/tvItemUserName"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        tools:text="Greg" />
+
+    <ImageButton
+        android:id="@+id/ibLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTimeAgo"
+        android:layout_alignStart="@+id/tvTimeAgo"
+        android:layout_marginTop="7dp"
+        app:srcCompat="@drawable/ufi_heart" />
+
+    <ImageButton
+        android:id="@+id/ibComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ibLike"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/ibLike"
+        app:srcCompat="@drawable/ufi_comment" />
+
+    <ImageButton
+        android:id="@+id/ibShare"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/ibLike"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/ibComment"
+        app:srcCompat="@drawable/direct" />
+
+</RelativeLayout>
