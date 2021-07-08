@@ -85,7 +85,7 @@ public class SignupActivity extends AppCompatActivity {
                     return;
                 }
                 //Else navigate to the main activity if the user has signed in properly
-                Intent intent = new Intent(SignupActivity.this, MainActivity.class);
+                Intent intent = new Intent(SignupActivity.this, FeedActivity.class);
                 startActivity(intent);
             }
         });
