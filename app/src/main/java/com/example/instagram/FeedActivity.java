@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ public class FeedActivity extends AppCompatActivity {
 
     private static final String TAG = "FeedActivity";
 
+    SwipeRefreshLayout swipeRefreshLayout;
     List<Post> posts;
     RecyclerView rvPosts;
     PostsAdapter adapter;
@@ -37,10 +39,24 @@ public class FeedActivity extends AppCompatActivity {
         //Find components
         rvPosts = findViewById(R.id.rvPosts);
         toolbar = findViewById(R.id.tbFeedToolbar);
+        swipeRefreshLayout = findViewById(R.id.scPosts);
+
+        //Remove title from toolbar
         toolbar.setTitle("");
 
         // Sets the Toolbar to act as the ActionBar for this Activity window
         setSupportActionBar(toolbar);
+
+        // Setup refresh listener which triggers new data loading
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                fetchTimelineAsync(0);
+            }
+        });
 
         //Initialize posts array
         posts = new ArrayList<>();
@@ -57,6 +73,14 @@ public class FeedActivity extends AppCompatActivity {
         //Query posts
         queryPosts();
 
+    }
+
+    private void fetchTimelineAsync(int i) {
+        posts.clear();
+        adapter.clear();
+        queryPosts();
+        adapter.addAll(posts);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     //Menu icons are inflated
@@ -110,9 +134,10 @@ public class FeedActivity extends AppCompatActivity {
                     return;
                 }
                 //Successful query
-                for (Post post : posts) {
-                    Log.i(TAG, "Post Description: " + post.getDescription() + ", user: " + post.getUser().getUsername());
-                }
+                Log.i(TAG, "done: Retrieved Posts");
+//                for (Post post : posts) {
+//                    Log.i(TAG, "Post Description: " + post.getDescription() + ", user: " + post.getUser().getUsername());
+//                }
 
                 //Save received posts to list
                 FeedActivity.this.posts.addAll(posts);
