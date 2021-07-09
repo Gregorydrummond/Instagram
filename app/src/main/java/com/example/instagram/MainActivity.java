@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     //Save post to backend
     private void savePost(String description, ParseUser parseUser, File photoFile) {
         //Create new post object
-        Post post = new Post();
+        Post post = new Post(parseUser);
         
         //Set data
         post.setDescription(description);

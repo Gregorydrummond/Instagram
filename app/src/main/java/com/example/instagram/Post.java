@@ -7,6 +7,9 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcel;
 
 import java.util.Date;
@@ -20,8 +23,15 @@ public class Post extends ParseObject {
     public static final String KEY_DESCRIPTION = "description";
     public static final String KEY_IMAGE = "image";
     public static final String KEY_USER = "user";
+    public static final String KEY_LIKED_BY = "likedBy";
+    public boolean likedByCurrentUser = false;
 
     public Post() {}
+
+    //Create likedBy array
+    public Post(ParseUser parseUser) {
+        put(KEY_LIKED_BY, new JSONArray());
+    }
 
     //Get description
     public String getDescription() {
@@ -51,6 +61,35 @@ public class Post extends ParseObject {
     //Set user
     public void setUser(ParseUser parseUser) {
         put(KEY_USER, parseUser);
+    }
+
+    //Get liked by array
+    public JSONArray getLikedByArray() {
+        return getJSONArray(KEY_LIKED_BY);
+    }
+
+    //Update liked by array
+    public void setLikedByArray(ParseUser parseUser, boolean liked) throws JSONException {
+        JSONArray jsonArray = getJSONArray(KEY_LIKED_BY);
+        assert jsonArray != null;
+
+        //Adds or remove user depending on whether user liked or removed the like
+        if(liked) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("name", parseUser.getObjectId());
+            jsonArray.put(jsonObject);
+            put(KEY_LIKED_BY, jsonArray);
+        }
+        else {
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if(jsonObject.getString("name").equals(ParseUser.getCurrentUser().getObjectId())) {
+                    jsonArray.remove(i);
+                    put(KEY_LIKED_BY, jsonArray);
+                    return;
+                }
+            }
+        }
     }
 
     //Get createdAt

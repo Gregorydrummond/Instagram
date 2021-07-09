@@ -2,23 +2,35 @@ package com.example.instagram;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
+
+    private static final String TAG = "PostsAdapter";
 
     Context context;
     List<Post> posts;
@@ -41,7 +53,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull PostsAdapter.ViewHolder holder, int position) {
         Post post = posts.get(position);
-        holder.bind(post);
+        try {
+            holder.bind(post);
+        } catch (JSONException e) {
+            Log.e(TAG, "onBindViewHolder: Error retrieving json array", e);
+        }
     }
 
     @Override
@@ -69,6 +85,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         TextView tvTimeAgo;
         TextView tvName;
         ImageView ivPostImage;
+        ImageView ivLike;
+        ImageView ivComment;
+        ImageView ivSave;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,12 +98,15 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivPostImage = itemView.findViewById(R.id.ivItemPostImage);
             tvTimeAgo = itemView.findViewById(R.id.tvTimeAgo);
             tvName = itemView.findViewById(R.id.tvName);
+            ivLike = itemView.findViewById(R.id.ivLike);
+            ivComment = itemView.findViewById(R.id.ivComment);
+            ivSave = itemView.findViewById(R.id.ivSave);
 
             //Add this as the itemView's OnClickListener
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Post post) {
+        public void bind(Post post) throws JSONException {
             //Set data
             tvUserName.setText(post.getUser().getUsername());
             tvDescription.setText(post.getDescription());
@@ -96,6 +118,67 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             if(image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivPostImage);
             }
+
+            //Like status
+            //Get liked by array
+            JSONArray jsonArray = post.getLikedByArray();
+
+            //See if current user liked the post
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if(jsonObject.getString("name").equals(ParseUser.getCurrentUser().getObjectId())) {
+                    ivLike.setImageResource(R.drawable.ufi_heart_active);
+                    post.likedByCurrentUser = true;
+                    break;
+                }
+            }
+
+            //Like button click listener
+            ivLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //User likes post
+                    if(!post.likedByCurrentUser) {
+                        post.likedByCurrentUser = true;
+                        ivLike.setImageResource(R.drawable.ufi_heart_active);
+                        try {
+                            post.setLikedByArray(ParseUser.getCurrentUser(), true);
+                            post.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    //Error handler
+                                    if(e != null) {
+                                        Log.e(TAG, "done: Error saving liking post", e);
+                                    }
+                                    Log.i(TAG, "done: Post liked!");
+                                }
+                            });
+                        } catch (JSONException e) {
+                            Log.e(TAG, "onClick: Like unsuccessful!", e);
+                        }
+                    }
+                    //User unlikes post
+                    else {
+                        post.likedByCurrentUser = false;
+                        ivLike.setImageResource(R.drawable.ufi_heart);
+                        try {
+                            post.setLikedByArray(ParseUser.getCurrentUser(), false);
+                            post.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    //Error handler
+                                    if(e != null) {
+                                        Log.e(TAG, "done: Error unliking post", e);
+                                    }
+                                    Log.i(TAG, "done: Post unliked!");
+                                }
+                            });
+                        } catch (JSONException e) {
+                            Log.e(TAG, "onClick: Like unsuccessful!", e);
+                        }
+                    }
+                }
+            });
         }
 
         @Override
