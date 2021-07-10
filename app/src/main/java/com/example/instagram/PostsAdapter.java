@@ -125,17 +125,25 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             //Like Info
             //Get liked by array
             JSONArray jsonArray = post.getLikedByArray();
+
+            //Number of user who liked the post
             int numOfLikes = jsonArray.length();
+
+            //If likes is at 0, hide the text view
             if(numOfLikes == 0) {
                 ivLike.setImageResource(R.drawable.ufi_heart);
                 tvLikeInfo.setHeight(0);
             }
+
+            //1 like, display the name of the user who liked it
             else if(numOfLikes == 1) {
                 JSONObject jsonObject = jsonArray.getJSONObject(0);
                 String name = jsonObject.getString("user");
                 String likeMessage = "Liked by " + name;
                 tvLikeInfo.setText(likeMessage);
             }
+
+            //2 or more likes
             else {
                 Random random = new Random();
                 JSONObject jsonObject = jsonArray.getJSONObject(random.nextInt(numOfLikes));
