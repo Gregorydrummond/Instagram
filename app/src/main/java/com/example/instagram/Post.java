@@ -76,14 +76,14 @@ public class Post extends ParseObject {
         //Adds or remove user depending on whether user liked or removed the like
         if(liked) {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name", parseUser.getObjectId());
+            jsonObject.put("user", parseUser.getUsername());
             jsonArray.put(jsonObject);
             put(KEY_LIKED_BY, jsonArray);
         }
         else {
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if(jsonObject.getString("name").equals(ParseUser.getCurrentUser().getObjectId())) {
+                if(jsonObject.getString("user").equals(parseUser.getUsername())) {
                     jsonArray.remove(i);
                     put(KEY_LIKED_BY, jsonArray);
                     return;

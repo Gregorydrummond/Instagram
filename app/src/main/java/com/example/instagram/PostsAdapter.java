@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.util.List;
+import java.util.Random;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
 
@@ -84,6 +85,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         TextView tvDescription;
         TextView tvTimeAgo;
         TextView tvName;
+        TextView tvLikeInfo;
         ImageView ivPostImage;
         ImageView ivLike;
         ImageView ivComment;
@@ -98,6 +100,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             ivPostImage = itemView.findViewById(R.id.ivItemPostImage);
             tvTimeAgo = itemView.findViewById(R.id.tvTimeAgo);
             tvName = itemView.findViewById(R.id.tvName);
+            tvLikeInfo = itemView.findViewById(R.id.tvLikeInfo);
             ivLike = itemView.findViewById(R.id.ivLike);
             ivComment = itemView.findViewById(R.id.ivComment);
             ivSave = itemView.findViewById(R.id.ivSave);
@@ -119,14 +122,35 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 Glide.with(context).load(image.getUrl()).into(ivPostImage);
             }
 
-            //Like status
+            //Like Info
             //Get liked by array
             JSONArray jsonArray = post.getLikedByArray();
+            int numOfLikes = jsonArray.length();
+            if(numOfLikes == 0) {
+                ivLike.setImageResource(R.drawable.ufi_heart);
+                tvLikeInfo.setHeight(0);
+            }
+            else if(numOfLikes == 1) {
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                String name = jsonObject.getString("user");
+                String likeMessage = "Liked by " + name;
+                tvLikeInfo.setText(likeMessage);
+            }
+            else {
+                Random random = new Random();
+                JSONObject jsonObject = jsonArray.getJSONObject(random.nextInt(numOfLikes));
+                String name = jsonObject.getString("user");
+                String other = numOfLikes > 2 ? " others" : " other";
+                String likeMessage = "Liked by " + name + " and " + (numOfLikes - 1) + other;
+                tvLikeInfo.setText(likeMessage);
+            }
 
+
+            //Like status
             //See if current user liked the post
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                if(jsonObject.getString("name").equals(ParseUser.getCurrentUser().getObjectId())) {
+                if(jsonObject.getString("user").equals(ParseUser.getCurrentUser().getUsername())) {
                     ivLike.setImageResource(R.drawable.ufi_heart_active);
                     post.likedByCurrentUser = true;
                     break;

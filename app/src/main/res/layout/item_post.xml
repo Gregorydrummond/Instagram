@@ -52,7 +52,7 @@
         android:id="@+id/tvName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivLike"
+        android:layout_below="@+id/tvLikeInfo"
         android:layout_alignStart="@+id/tvItemUserName"
         android:layout_marginTop="5dp"
         android:textColor="#000000"
@@ -98,5 +98,25 @@
         android:layout_marginEnd="15dp"
         android:clickable="true"
         app:srcCompat="@drawable/ufi_save_icon" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tvItemUserName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:rotation="90"
+        app:srcCompat="@drawable/media_option_button" />
+
+    <TextView
+        android:id="@+id/tvLikeInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivLike"
+        android:layout_alignStart="@+id/tvItemUserName"
+        android:layout_marginTop="5dp"
+        tools:text="Like by Greg and 2 others" />
 
 </RelativeLayout>
