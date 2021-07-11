@@ -19,11 +19,15 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FeedActivity extends AppCompatActivity {
 
     private static final String TAG = "FeedActivity";
+
+    // Store a member variable for the listener
+    private EndlessRecyclerViewScrollListener scrollListener;
 
     SwipeRefreshLayout swipeRefreshLayout;
     List<Post> posts;
@@ -65,14 +69,70 @@ public class FeedActivity extends AppCompatActivity {
         adapter = new PostsAdapter(this, posts);
 
         //Set layout manager on the rv
-        rvPosts.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvPosts.setLayoutManager(layoutManager);
 
         //Set adapter on the rv
         rvPosts.setAdapter(adapter);
 
+        // Retain an instance of EndlessRecyclerViewScrollListener so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
+            }
+        };
+
+        // Adds the scroll listener to RecyclerView
+        rvPosts.addOnScrollListener(scrollListener);
+
         //Query posts
         queryPosts();
+    }
 
+    //Loading additional posts for infinite scrolling
+    private void loadNextDataFromApi(int page) {
+        Log.d(TAG, "loadNextDataFromApi: Called");
+        //Specify which class to query
+        ParseQuery<Post> query = ParseQuery.getQuery("Post");
+
+        //Include user info
+        query.include(Post.KEY_USER);
+
+        //Limit query to latest 20 items
+        query.setLimit(20);
+
+        //Order posts by creation date (newest first)
+        query.addDescendingOrder("createdAt");
+
+        //Higher createdAt values == older posts??
+        //Log.d(TAG, "loadNextDataFromApi: " + posts.get(posts.size() - 1).getCreatedAt());
+        query.whereGreaterThan("createdAt", posts.get(posts.size() - 1).getCreatedAt());            //Not doing what I thought it would do
+
+        //Get post objects
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> objects, ParseException e) {
+                //Error in query
+                if(e != null) {
+                    Log.e(TAG, "Issue with getting additional posts", e);
+                    return;
+                }
+                //Successful query
+                Log.i(TAG, "done: Retrieved Additional Posts");
+//                for (Post post : posts) {
+//                    Log.i(TAG, "Post Description: " + post.getDescription() + ", user: " + post.getUser().getUsername());
+//                }
+
+                //Save received posts to list
+                FeedActivity.this.posts.addAll(posts);
+
+                //Notify adapter of change
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void fetchTimelineAsync(int i) {
