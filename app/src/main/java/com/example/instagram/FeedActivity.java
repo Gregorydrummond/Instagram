@@ -3,6 +3,7 @@ package com.example.instagram;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -12,7 +13,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -34,6 +39,7 @@ public class FeedActivity extends AppCompatActivity {
     RecyclerView rvPosts;
     PostsAdapter adapter;
     Toolbar toolbar;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,28 @@ public class FeedActivity extends AppCompatActivity {
         rvPosts = findViewById(R.id.rvPosts);
         toolbar = findViewById(R.id.tbFeedToolbar);
         swipeRefreshLayout = findViewById(R.id.scPosts);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        //Set bottom navigation item selected listener
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch (item.getItemId()) {
+                    case R.id.action_home:
+                        Log.i(TAG, "onNavigationItemSelected: Home");
+                        break;
+                    case R.id.action_compose:
+                        Log.i(TAG, "onNavigationItemSelected: Compose");
+                        break;
+                    case R.id.action_profile:
+                        Log.i(TAG, "onNavigationItemSelected: Profile");
+                    default:
+                        break;
+                }
+                return true;
+            }
+        });
 
         //Remove title from toolbar
         toolbar.setTitle("");
