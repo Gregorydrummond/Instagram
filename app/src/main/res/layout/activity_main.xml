@@ -7,42 +7,21 @@
     android:background="#FFFFFF"
     tools:context=".MainActivity">
 
-
-    <ImageView
-        android:id="@+id/ivPostImage"
+    <FrameLayout
+        android:id="@+id/flContainer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="20dp"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <Button
-        android:id="@+id/btnGetImage"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etDescription"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_navigation"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="50dp"
-        android:text="Take Picture" />
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp" />
 
-    <Button
-        android:id="@+id/btnSubmit"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnGetImage"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
-        android:text="Post" />
-
-    <EditText
-        android:id="@+id/etDescription"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPostImage"
-        android:layout_marginTop="70dp"
-        android:ems="10"
-        android:hint="Description"
-        android:inputType="textPersonName" />
+        android:layout_alignParentBottom="true"
+        app:menu="@menu/menu_bottom_navigation" />
 
 </RelativeLayout>

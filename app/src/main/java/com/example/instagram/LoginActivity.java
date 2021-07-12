@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //Go to main activity if user is already logged in
         if(ParseUser.getCurrentUser() != null) {
-            goToFeedActivity();
+            goToMainActivity();
         }
 
         //Find Components
@@ -78,15 +78,15 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 //Else navigate to the feed activity if the user has signed in properly
-                goToFeedActivity();
+                goToMainActivity();
                 Toast.makeText(LoginActivity.this, "Successfully logged in!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     //Start main activity
-    private void goToFeedActivity() {
-        Intent intent = new Intent(this, FeedActivity.class);
+    private void goToMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         //Closes login activity after user logs in
         finish();
